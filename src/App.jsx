@@ -186,7 +186,26 @@ const process = [
 ];
 
 // ─── КОМПОНЕНТЫ ──────────────────────────────────────────────────────────────
+function CaseVisual({ image, title, fit, bg }) {
+  const isCover = fit === 'cover';
 
+  return (
+    <div
+      className="overflow-hidden rounded-[2rem]"
+      style={{ background: bg || '#f0ede8' }}
+    >
+      <div className="aspect-[16/10]">
+        <img
+          src={image}
+          alt={title}
+          className={`h-full w-full ${
+            isCover ? 'object-cover object-top' : 'object-contain p-4'
+          }`}
+        />
+      </div>
+    </div>
+  );
+}
 // ── Визуальная панель кейса ───────────────────────────────────────────────────
 function CasesSlider({ cases }) {
   const [current, setCurrent] = useState(0);
