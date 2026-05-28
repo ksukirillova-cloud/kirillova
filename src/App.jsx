@@ -188,33 +188,15 @@ const process = [
 // ─── КОМПОНЕНТЫ ──────────────────────────────────────────────────────────────
 
 // ── Визуальная панель кейса ───────────────────────────────────────────────────
-function CaseVisual({ image, title, fit, bg }) {
-  const isCover = fit === 'cover';
-  return (
-    <div
-      className="overflow-hidden rounded-[1.6rem]"
-      style={{ background: bg || '#f0ede8' }}
-    >
-      <div className="aspect-[16/10]">
-        <img
-          src={image}
-          alt={title}
-          className={`h-full w-full ${isCover ? 'object-cover object-top' : 'object-contain p-4'}`}
-        />
-      </div>
-    </div>
-  );
-}
-
-// ── Слайдер кейсов ────────────────────────────────────────────────────────────
 function CasesSlider({ cases }) {
   const [current, setCurrent] = useState(0);
-  const [dir, setDir] = useState(1); // 1 = вперёд, -1 = назад
+  const [dir, setDir] = useState(1);
 
   const go = (next) => {
     setDir(next > current ? 1 : -1);
     setCurrent(next);
   };
+
   const prev = () => go((current - 1 + cases.length) % cases.length);
   const next = () => go((current + 1) % cases.length);
 
@@ -223,13 +205,16 @@ function CasesSlider({ cases }) {
   const variants = {
     enter: (d) => ({ opacity: 0, x: d > 0 ? 60 : -60 }),
     center: { opacity: 1, x: 0, transition: { duration: 0.45, ease: 'easeOut' } },
-    exit: (d) => ({ opacity: 0, x: d > 0 ? -40 : 40, transition: { duration: 0.3, ease: 'easeIn' } }),
+    exit: (d) => ({
+      opacity: 0,
+      x: d > 0 ? -40 : 40,
+      transition: { duration: 0.3, ease: 'easeIn' },
+    }),
   };
 
   return (
     <div>
-      {/* ── Слайд ─────────────────────────────────────── */}
-      <div className="relative overflow-hidden rounded-[2.4rem] bg-white/60 backdrop-blur">
+      <div className="relative overflow-hidden rounded-[2.4rem] bg-white/60 p-3 backdrop-blur md:p-4">
         <AnimatePresence custom={dir} mode="wait">
           <motion.div
             key={current}
@@ -238,63 +223,96 @@ function CasesSlider({ cases }) {
             initial="enter"
             animate="center"
             exit="exit"
-            className="grid lg:grid-cols-[1.5fr_1fr]"
+            className="space-y-4"
           >
-            {/* Визуал */}
-            <div className="p-3 lg:p-4">
-              <CaseVisual image={item.image} title={item.title} fit={item.fit} bg={item.bg} />
-            </div>
+            {/* Верх: название + теги */}
+            <div className="rounded-[2rem] border border-black/10 bg-[#F8F5EF] p-6 md:p-8">
+              <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-start">
+                <div>
+                  <p className="mb-3 text-xs font-bold uppercase tracking-[0.24em] text-black/38">
+                    {item.label}
+                  </p>
+                  <h3 className="max-w-4xl text-3xl font-extrabold leading-[1.02] tracking-[-0.05em] md:text-5xl">
+                    {item.title}
+                  </h3>
+                </div>
 
-            {/* Инфо */}
-            <div className="flex flex-col gap-0 border-t border-black/8 p-6 lg:border-l lg:border-t-0 lg:p-8">
-              {/* Шапка */}
-              <div className="mb-6">
-                <p className="mb-1.5 text-xs font-bold uppercase tracking-[0.22em] text-black/40">{item.label}</p>
-                <h3 className="text-2xl font-extrabold leading-tight tracking-[-0.04em] md:text-3xl">{item.title}</h3>
-                <div className="mt-3 flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-2 lg:max-w-sm lg:justify-end">
                   {item.tags.map((t) => (
-                    <span key={t} className="rounded-full border border-black/10 bg-[#F4F0E8] px-2.5 py-0.5 text-[11px] font-bold text-black/55">{t}</span>
+                    <span
+                      key={t}
+                      className="rounded-full border border-black/10 bg-white px-3 py-1 text-xs font-bold text-black/55"
+                    >
+                      {t}
+                    </span>
                   ))}
                 </div>
               </div>
+            </div>
 
-              {/* БЫЛО */}
-              <div className="border-t border-black/8 py-5">
-                <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.25em] text-black/35">Было</p>
-                <p className="text-sm leading-relaxed text-black/65">{item.problem}</p>
+            {/* Середина: визуал + главный результат */}
+            <div className="grid gap-4 lg:grid-cols-12">
+              <div className="lg:col-span-7">
+                <CaseVisual image={item.image} title={item.title} fit={item.fit} bg={item.bg} />
               </div>
 
-              {/* СДЕЛАНО */}
-              <div className="border-t border-black/8 py-5">
-                <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.25em] text-black/35">Сделано</p>
-                <p className="text-sm leading-relaxed text-black/65">{item.solution}</p>
+              <div className="flex min-h-[18rem] flex-col justify-between rounded-[2rem] bg-[#C8FF3D] p-7 text-black md:p-9 lg:col-span-5">
+                <div>
+                  <p className="mb-4 text-xs font-bold uppercase tracking-[0.26em] text-black/45">
+                    Ключевой результат
+                  </p>
+                  <p className="text-4xl font-extrabold leading-[1.02] tracking-[-0.055em] md:text-5xl">
+                    {item.metric}
+                  </p>
+                </div>
+
+                <p className="mt-8 max-w-md text-base font-bold leading-relaxed text-black/75 md:text-lg">
+                  {item.result}
+                </p>
+              </div>
+            </div>
+
+            {/* Низ: было / сделано */}
+            <div className="grid gap-4 lg:grid-cols-2">
+              <div className="rounded-[2rem] border border-black/10 bg-white p-6 md:p-8">
+                <p className="mb-4 text-xs font-bold uppercase tracking-[0.26em] text-black/35">
+                  Было
+                </p>
+                <p className="text-lg leading-relaxed text-black/65">
+                  {item.problem}
+                </p>
               </div>
 
-              {/* СТАЛО — выделен */}
-              <div className="mt-auto rounded-[1.4rem] bg-[#C8FF3D] p-5">
-                <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.25em] text-black/50">Стало</p>
-                <p className="text-sm font-bold leading-relaxed text-black">{item.result}</p>
-                <p className="mt-4 text-2xl font-extrabold tracking-[-0.04em] text-black">{item.metric}</p>
+              <div className="rounded-[2rem] border border-black/10 bg-white p-6 md:p-8">
+                <p className="mb-4 text-xs font-bold uppercase tracking-[0.26em] text-black/35">
+                  Сделано
+                </p>
+                <p className="text-lg leading-relaxed text-black/65">
+                  {item.solution}
+                </p>
               </div>
             </div>
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* ── Навигация ──────────────────────────────────── */}
+      {/* Навигация */}
       <div className="mt-6 flex items-center justify-between">
-        {/* Счётчик + кнопки */}
         <div className="flex items-center gap-4">
           <button
+            type="button"
             onClick={prev}
             className="flex h-12 w-12 items-center justify-center rounded-full border border-black/15 bg-white/70 backdrop-blur transition hover:bg-black hover:text-white"
           >
             <ArrowLeft className="h-5 w-5" />
           </button>
+
           <span className="font-mono text-sm font-bold tabular-nums text-black/40">
             {String(current + 1).padStart(2, '0')} / {String(cases.length).padStart(2, '0')}
           </span>
+
           <button
+            type="button"
             onClick={next}
             className="flex h-12 w-12 items-center justify-center rounded-full border border-black/15 bg-white/70 backdrop-blur transition hover:bg-black hover:text-white"
           >
@@ -302,10 +320,10 @@ function CasesSlider({ cases }) {
           </button>
         </div>
 
-        {/* Точки */}
         <div className="flex items-center gap-2">
           {cases.map((_, i) => (
             <button
+              type="button"
               key={i}
               onClick={() => go(i)}
               className={`rounded-full transition-all ${
