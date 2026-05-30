@@ -66,6 +66,7 @@ const packages = [
     price: 'от 3 500 ₽',
     desc: 'Разбираю сайт, оффер, контент или воронку — показываю, где теряется клиент и что можно быстро исправить.',
     tag: 'быстрый старт',
+    cta: 'Записаться на разбор',
   },
   {
     name: 'Экспресс-точка входа',
@@ -73,18 +74,21 @@ const packages = [
     desc: 'Мини-сайт до 5 экранов: структура, тексты, дизайн, кнопки заявки. Подходит, если срочно нужна нормальная ссылка для клиентов.',
     tag: 'популярный',
     accent: true,
+    cta: 'Получить сайт за 7 дней',
   },
   {
     name: 'Упаковка + сайт',
     price: 'от 15 000 ₽',
     desc: 'Разбираем аудиторию, оффер, структуру, тексты и собираем страницу, которая объясняет ценность и ведёт к заявке.',
     tag: 'для услуг и экспертов',
+    cta: 'Обсудить проект',
   },
   {
     name: 'Сайт + заявки + автоматизация',
     price: 'от 25 000 ₽',
     desc: 'Страница + путь заявки: форма, таблица, уведомления, автоответы и понятная логика обработки лидов.',
     tag: 'для порядка в лидах',
+    cta: 'Выстроить систему',
   },
 ];
 
@@ -276,6 +280,14 @@ function CasesSlider({ cases }) {
           ))}
         </div>
       </div>
+
+      {/* CTA после кейсов — человек только что увидел результаты */}
+      <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+        <a href={telegramUrl} className="group inline-flex items-center justify-center gap-2 rounded-full bg-black px-7 py-4 text-base font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#1B63FF]">
+          Хочу так же — обсудить проект
+          <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
+        </a>
+      </div>
     </div>
   );
 }
@@ -346,12 +358,14 @@ export default function KseniMarketingSystemsLanding() {
               </p>
 
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-                <a href={telegramUrl} className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#1B63FF] px-7 py-4 text-base font-bold text-white shadow-[0_18px_60px_rgba(27,99,255,0.32)] transition hover:-translate-y-0.5">
-                  Обсудить задачу
+                {/* Основная кнопка — низкий порог входа */}
+                <a href="#packages" className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#1B63FF] px-7 py-4 text-base font-bold text-white shadow-[0_18px_60px_rgba(27,99,255,0.32)] transition hover:-translate-y-0.5">
+                  Посмотреть форматы
                   <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
                 </a>
-                <a href="#packages" className="inline-flex items-center justify-center rounded-full border border-black/15 bg-white/45 px-7 py-4 text-base font-bold backdrop-blur transition hover:bg-white">
-                  Посмотреть форматы
+                {/* Вторичная — для готовых */}
+                <a href={telegramUrl} className="inline-flex items-center justify-center rounded-full border border-black/15 bg-white/45 px-7 py-4 text-base font-bold backdrop-blur transition hover:bg-white">
+                  Получить разбор за 3 500 ₽
                 </a>
               </div>
             </motion.div>
@@ -428,6 +442,13 @@ export default function KseniMarketingSystemsLanding() {
                 </div>
               ))}
             </div>
+            {/* CTA после болей — человек узнал себя */}
+            <div className="mt-10 flex justify-center">
+              <a href={telegramUrl} className="group inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-4 text-base font-bold text-white backdrop-blur transition hover:bg-white hover:text-black">
+                Узнаёте себя? Начнём с разбора
+                <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
+              </a>
+            </div>
           </motion.div>
         </section>
 
@@ -486,6 +507,10 @@ export default function KseniMarketingSystemsLanding() {
                       <p className="mt-1 text-sm text-white/60">ниш и индустрий</p>
                     </div>
                   </div>
+                  {/* CTA — доверие начало формироваться */}
+                  <a href="#cases" className="mt-7 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-bold text-white transition hover:bg-white hover:text-black">
+                    Посмотреть кейсы <ArrowRight className="h-4 w-4" />
+                  </a>
                 </div>
 
               </motion.div>
@@ -652,7 +677,7 @@ export default function KseniMarketingSystemsLanding() {
                   <p className={`mt-4 text-4xl font-extrabold tracking-[-0.055em] ${pack.accent ? 'text-[#C8FF3D]' : 'text-[#1B63FF]'}`}>{pack.price}</p>
                   <p className={`mt-6 leading-relaxed ${pack.accent ? 'text-white/78' : 'text-black/62'}`}>{pack.desc}</p>
                   <a href={telegramUrl} className={`mt-10 inline-flex items-center gap-2 rounded-full px-5 py-3 font-bold ${pack.accent ? 'bg-white text-black' : 'bg-black text-white'}`}>
-                    Написать <ArrowRight className="h-4 w-4" />
+                    {pack.cta} <ArrowRight className="h-4 w-4" />
                   </a>
                 </motion.div>
               ))}
@@ -676,6 +701,13 @@ export default function KseniMarketingSystemsLanding() {
                   <p className="text-xl font-bold leading-snug tracking-[-0.03em]">{text}</p>
                 </motion.div>
               ))}
+              {/* CTA после процесса — страх неизвестности снят */}
+              <motion.div {...fadeUp} className="pt-2">
+                <a href={telegramUrl} className="group inline-flex items-center gap-2 rounded-full bg-black px-7 py-4 text-base font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#1B63FF]">
+                  Понятно, начнём
+                  <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
+                </a>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -687,7 +719,7 @@ export default function KseniMarketingSystemsLanding() {
               <div>
                 <p className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-[#C8FF3D]">почему я</p>
                 <h2 className="text-4xl font-extrabold leading-[1.02] tracking-[-0.045em] md:text-6xl">
-                  Я смотрю на сайт как маркетолог, а не как на витрину
+                  Я собираю систему, а не просто сайт
                 </h2>
               </div>
               <div className="grid gap-4 md:grid-cols-2">
