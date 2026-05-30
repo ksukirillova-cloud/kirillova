@@ -88,7 +88,6 @@ const packages = [
   },
 ];
 
-// images: массив путей. Metro использует 4 слайда кампании.
 const cases = [
   {
     title: 'Упаковка B2B IT-платформы здравоохранения',
@@ -164,19 +163,7 @@ const cases = [
   },
 ];
 
-// Оставьте пустым, пока нет реальных отзывов — секция не отрисуется
-const testimonials = [
-  // {
-  //   text: 'Ксения за неделю разобрала мой хаос и собрала страницу, которую не стыдно отправить клиенту. Первая заявка пришла через 3 дня после запуска.',
-  //   name: 'Анна М.',
-  //   role: 'психолог, Москва',
-  // },
-  // {
-  //   text: 'Наконец-то сайт, который объясняет, что мы делаем. Раньше я тратила 20 минут на каждого нового клиента в переписке — теперь просто кидаю ссылку.',
-  //   name: 'Ольга К.',
-  //   role: 'владелец студии',
-  // },
-];
+const testimonials = [];
 
 const process = [
   ['01', 'Вы рассказываете, что продаёте, кому и где сейчас теряются клиенты.'],
@@ -187,27 +174,22 @@ const process = [
 ];
 
 // ─── КОМПОНЕНТЫ ──────────────────────────────────────────────────────────────
+
 function CaseVisual({ image, title, fit, bg }) {
   const isCover = fit === 'cover';
-
   return (
-    <div
-      className="overflow-hidden rounded-[2rem]"
-      style={{ background: bg || '#f0ede8' }}
-    >
+    <div className="overflow-hidden rounded-[2rem]" style={{ background: bg || '#f0ede8' }}>
       <div className="aspect-[16/10]">
         <img
           src={image}
           alt={title}
-          className={`h-full w-full ${
-            isCover ? 'object-cover object-top' : 'object-contain p-4'
-          }`}
+          className={`h-full w-full ${isCover ? 'object-cover object-top' : 'object-contain p-4'}`}
         />
       </div>
     </div>
   );
 }
-// ── Визуальная панель кейса ───────────────────────────────────────────────────
+
 function CasesSlider({ cases }) {
   const [current, setCurrent] = useState(0);
   const [dir, setDir] = useState(1);
@@ -225,132 +207,71 @@ function CasesSlider({ cases }) {
   const variants = {
     enter: (d) => ({ opacity: 0, x: d > 0 ? 60 : -60 }),
     center: { opacity: 1, x: 0, transition: { duration: 0.45, ease: 'easeOut' } },
-    exit: (d) => ({
-      opacity: 0,
-      x: d > 0 ? -40 : 40,
-      transition: { duration: 0.3, ease: 'easeIn' },
-    }),
+    exit: (d) => ({ opacity: 0, x: d > 0 ? -40 : 40, transition: { duration: 0.3, ease: 'easeIn' } }),
   };
 
   return (
     <div>
       <div className="relative overflow-hidden rounded-[2.4rem] bg-white/60 p-3 backdrop-blur md:p-4">
         <AnimatePresence custom={dir} mode="wait">
-          <motion.div
-            key={current}
-            custom={dir}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            className="space-y-4"
-          >
-            {/* Верх: название + теги */}
+          <motion.div key={current} custom={dir} variants={variants} initial="enter" animate="center" exit="exit" className="space-y-4">
             <div className="rounded-[2rem] border border-black/10 bg-[#F8F5EF] p-6 md:p-8">
               <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-start">
                 <div>
-                  <p className="mb-3 text-xs font-bold uppercase tracking-[0.24em] text-black/38">
-                    {item.label}
-                  </p>
-                  <h3 className="max-w-4xl text-3xl font-extrabold leading-[1.02] tracking-[-0.05em] md:text-5xl">
-                    {item.title}
-                  </h3>
+                  <p className="mb-3 text-xs font-bold uppercase tracking-[0.24em] text-black/38">{item.label}</p>
+                  <h3 className="max-w-4xl text-3xl font-extrabold leading-[1.02] tracking-[-0.05em] md:text-5xl">{item.title}</h3>
                 </div>
-
                 <div className="flex flex-wrap gap-2 lg:max-w-sm lg:justify-end">
                   {item.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full border border-black/10 bg-white px-3 py-1 text-xs font-bold text-black/55"
-                    >
-                      {t}
-                    </span>
+                    <span key={t} className="rounded-full border border-black/10 bg-white px-3 py-1 text-xs font-bold text-black/55">{t}</span>
                   ))}
                 </div>
               </div>
             </div>
 
-            {/* Середина: визуал + главный результат */}
             <div className="grid gap-4 lg:grid-cols-12">
               <div className="lg:col-span-7">
                 <CaseVisual image={item.image} title={item.title} fit={item.fit} bg={item.bg} />
               </div>
-
               <div className="flex min-h-[18rem] flex-col justify-between rounded-[2rem] bg-[#C8FF3D] p-7 text-black md:p-9 lg:col-span-5">
                 <div>
-                  <p className="mb-4 text-xs font-bold uppercase tracking-[0.26em] text-black/45">
-                    Ключевой результат
-                  </p>
-                  <p className="text-4xl font-extrabold leading-[1.02] tracking-[-0.055em] md:text-5xl">
-                    {item.metric}
-                  </p>
+                  <p className="mb-4 text-xs font-bold uppercase tracking-[0.26em] text-black/45">Ключевой результат</p>
+                  <p className="text-4xl font-extrabold leading-[1.02] tracking-[-0.055em] md:text-5xl">{item.metric}</p>
                 </div>
-
-                <p className="mt-8 max-w-md text-base font-bold leading-relaxed text-black/75 md:text-lg">
-                  {item.result}
-                </p>
+                <p className="mt-8 max-w-md text-base font-bold leading-relaxed text-black/75 md:text-lg">{item.result}</p>
               </div>
             </div>
 
-            {/* Низ: было / сделано */}
             <div className="grid gap-4 lg:grid-cols-2">
               <div className="rounded-[2rem] border border-black/10 bg-white p-6 md:p-8">
-                <p className="mb-4 text-xs font-bold uppercase tracking-[0.26em] text-black/35">
-                  Было
-                </p>
-                <p className="text-lg leading-relaxed text-black/65">
-                  {item.problem}
-                </p>
+                <p className="mb-4 text-xs font-bold uppercase tracking-[0.26em] text-black/35">Было</p>
+                <p className="text-lg leading-relaxed text-black/65">{item.problem}</p>
               </div>
-
               <div className="rounded-[2rem] border border-black/10 bg-white p-6 md:p-8">
-                <p className="mb-4 text-xs font-bold uppercase tracking-[0.26em] text-black/35">
-                  Сделано
-                </p>
-                <p className="text-lg leading-relaxed text-black/65">
-                  {item.solution}
-                </p>
+                <p className="mb-4 text-xs font-bold uppercase tracking-[0.26em] text-black/35">Сделано</p>
+                <p className="text-lg leading-relaxed text-black/65">{item.solution}</p>
               </div>
             </div>
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* Навигация */}
       <div className="mt-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <button
-            type="button"
-            onClick={prev}
-            className="flex h-12 w-12 items-center justify-center rounded-full border border-black/15 bg-white/70 backdrop-blur transition hover:bg-black hover:text-white"
-          >
+          <button type="button" onClick={prev} className="flex h-12 w-12 items-center justify-center rounded-full border border-black/15 bg-white/70 backdrop-blur transition hover:bg-black hover:text-white">
             <ArrowLeft className="h-5 w-5" />
           </button>
-
           <span className="font-mono text-sm font-bold tabular-nums text-black/40">
             {String(current + 1).padStart(2, '0')} / {String(cases.length).padStart(2, '0')}
           </span>
-
-          <button
-            type="button"
-            onClick={next}
-            className="flex h-12 w-12 items-center justify-center rounded-full border border-black/15 bg-white/70 backdrop-blur transition hover:bg-black hover:text-white"
-          >
+          <button type="button" onClick={next} className="flex h-12 w-12 items-center justify-center rounded-full border border-black/15 bg-white/70 backdrop-blur transition hover:bg-black hover:text-white">
             <ArrowRight className="h-5 w-5" />
           </button>
         </div>
-
         <div className="flex items-center gap-2">
           {cases.map((_, i) => (
-            <button
-              type="button"
-              key={i}
-              onClick={() => go(i)}
-              className={`rounded-full transition-all ${
-                i === current
-                  ? 'h-2.5 w-8 bg-black'
-                  : 'h-2.5 w-2.5 bg-black/20 hover:bg-black/40'
-              }`}
+            <button type="button" key={i} onClick={() => go(i)}
+              className={`rounded-full transition-all ${i === current ? 'h-2.5 w-8 bg-black' : 'h-2.5 w-2.5 bg-black/20 hover:bg-black/40'}`}
             />
           ))}
         </div>
@@ -386,19 +307,14 @@ export default function KseniMarketingSystemsLanding() {
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black text-white">К</span>
               <span>Ксения</span>
             </a>
-
             <nav className="hidden items-center gap-7 text-sm text-black/55 md:flex">
-              <a href="#approach" className="transition hover:text-black">Подход</a>
+              <a href="#about" className="transition hover:text-black">О себе</a>
               <a href="#services" className="transition hover:text-black">Что делаю</a>
               <a href="#cases" className="transition hover:text-black">Кейсы</a>
               <a href="#packages" className="transition hover:text-black">Форматы</a>
               <a href="#process" className="transition hover:text-black">Процесс</a>
             </nav>
-
-            <a
-              href={telegramUrl}
-              className="rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1B63FF]"
-            >
+            <a href={telegramUrl} className="rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1B63FF]">
               Написать
             </a>
           </header>
@@ -410,48 +326,36 @@ export default function KseniMarketingSystemsLanding() {
                 сайты · автоматизация · маркетинг
               </div>
 
-              {/*
-                БЫЛО: «Собираю эффективный маркетинг» — самоописание, не оффер.
-                СТАЛО: говорим про проблему клиента, а не про себя.
-              */}
-             <h1 className="max-w-6xl text-[2.8rem] font-extrabold leading-[0.96] tracking-[-0.05em] md:text-[4.8rem] lg:text-[6rem]">
-  Сайт и автоматизация заявок
-</h1>
+              <h1 className="max-w-6xl text-[2.8rem] font-extrabold leading-[0.96] tracking-[-0.05em] md:text-[4.8rem] lg:text-[6rem]">
+                Сайт и автоматизация заявок
+              </h1>
 
-<div className="mt-6 flex flex-wrap items-center gap-3">
-  <div className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/65 px-5 py-3 text-sm font-bold text-black/70 backdrop-blur md:text-base">
-    <Zap className="h-4 w-4 text-[#1B63FF]" />
-    5–7 дней
-  </div>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <div className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/65 px-5 py-3 text-sm font-bold text-black/70 backdrop-blur md:text-base">
+                  <Zap className="h-4 w-4 text-[#1B63FF]" />
+                  5–7 дней
+                </div>
+                <div className="inline-flex items-center gap-3 rounded-full bg-[#C8FF3D] px-6 py-3 text-base font-extrabold text-black shadow-[0_14px_40px_rgba(200,255,61,0.28)] md:text-lg">
+                  <span className="text-xs font-bold uppercase tracking-[0.2em] text-black/45">от</span>
+                  12 900 ₽
+                </div>
+              </div>
 
-  <div className="inline-flex items-center gap-3 rounded-full bg-[#C8FF3D] px-6 py-3 text-base font-extrabold text-black shadow-[0_14px_40px_rgba(200,255,61,0.28)] md:text-lg">
-    <span className="text-xs font-bold uppercase tracking-[0.2em] text-black/45">от</span>
-    12 900 ₽
-  </div>
-</div>
-
-<p className="mt-8 max-w-2xl text-xl leading-relaxed text-black/66 md:text-2xl">
-  Упаковка, сайт, заявки и автоматизация — чтобы человек сразу понял, что вы предлагаете, доверился и написал. Без хаоса в переписках.
-</p>
+              <p className="mt-8 max-w-2xl text-xl leading-relaxed text-black/66 md:text-2xl">
+                Упаковка, сайт, заявки и автоматизация — чтобы человек сразу понял, что вы предлагаете, доверился и написал. Без хаоса в переписках.
+              </p>
 
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href={telegramUrl}
-                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#1B63FF] px-7 py-4 text-base font-bold text-white shadow-[0_18px_60px_rgba(27,99,255,0.32)] transition hover:-translate-y-0.5"
-                >
+                <a href={telegramUrl} className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#1B63FF] px-7 py-4 text-base font-bold text-white shadow-[0_18px_60px_rgba(27,99,255,0.32)] transition hover:-translate-y-0.5">
                   Обсудить задачу
                   <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
                 </a>
-                <a
-                  href="#packages"
-                  className="inline-flex items-center justify-center rounded-full border border-black/15 bg-white/45 px-7 py-4 text-base font-bold backdrop-blur transition hover:bg-white"
-                >
+                <a href="#packages" className="inline-flex items-center justify-center rounded-full border border-black/15 bg-white/45 px-7 py-4 text-base font-bold backdrop-blur transition hover:bg-white">
                   Посмотреть форматы
                 </a>
               </div>
             </motion.div>
 
-            {/* Виджет в hero — убрали захардкоженные «2 слота», показываем реальные факты */}
             <motion.div
               {...fadeUp}
               transition={{ duration: 0.65, delay: 0.12 }}
@@ -466,7 +370,6 @@ export default function KseniMarketingSystemsLanding() {
                     <span>маркетинг-система</span>
                     <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#C8FF3D]" /> live</span>
                   </div>
-
                   <div className="mt-8 rounded-[1.6rem] bg-white p-5 shadow-sm">
                     <div className="mb-6 flex items-center justify-between">
                       <div>
@@ -475,7 +378,6 @@ export default function KseniMarketingSystemsLanding() {
                       </div>
                       <Send className="h-6 w-6 text-[#1B63FF]" />
                     </div>
-
                     <div className="space-y-3">
                       <div className="rounded-2xl bg-[#F4F0E8] p-4">
                         <p className="text-sm text-black/45">точка входа</p>
@@ -491,12 +393,9 @@ export default function KseniMarketingSystemsLanding() {
                       </div>
                     </div>
                   </div>
-
-                  {/* Убрали «2 экспресс-слота сегодня» — статичная FOMO ломает доверие.
-                      Вместо этого — реальные факты про работу. */}
                   <div className="mt-5 grid grid-cols-2 gap-3">
                     <div className="rounded-[1.6rem] bg-[#C8FF3D] p-5">
-                      <p className="text-5xl font-extrabold tracking-[-0.06em]">10+</p>
+                      <p className="text-5xl font-extrabold tracking-[-0.06em]">15+</p>
                       <p className="mt-2 text-sm font-bold">лет в маркетинге</p>
                     </div>
                     <div className="rounded-[1.6rem] bg-black p-5 text-white">
@@ -521,12 +420,6 @@ export default function KseniMarketingSystemsLanding() {
                 Можно быть сильным специалистом, делать хороший продукт и всё равно терять людей на простом месте: клиент не понял, что вы предлагаете, где посмотреть, сколько стоит и как записаться. Я помогаю собрать это в систему.
               </p>
             </div>
-
-            {/*
-              БЫЛО: CheckCircle2 рядом с болью — визуальный конфликт.
-                    «Галочка» = «всё ок», а текст = «у тебя проблема».
-              СТАЛО: AlertCircle + нейтральный border. Иконка читается как «внимание», не как «ок».
-            */}
             <div className="mt-12 grid gap-4 md:grid-cols-2">
               {painCards.map((item) => (
                 <div key={item} className="rounded-3xl border border-white/10 bg-white/5 p-5 text-white/82">
@@ -538,28 +431,65 @@ export default function KseniMarketingSystemsLanding() {
           </motion.div>
         </section>
 
-        {/* ─── ПОДХОД ────────────────────────────────────────────────────────── */}
-        <section id="approach" className="px-5 py-20 md:px-10 lg:px-14">
-          <div className="mx-auto max-w-7xl grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-            <motion.div {...fadeUp}>
-              <p className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-[#1B63FF]">позиция</p>
-              <h2 className="text-4xl font-extrabold leading-[1.02] tracking-[-0.045em] md:text-6xl">
-                Я не делаю «красиво ради красиво»
-              </h2>
-            </motion.div>
+        {/* ─── КТО Я + ПОЗИЦИЯ ───────────────────────────────────────────────── */}
+        <section id="about" className="px-5 py-20 md:px-10 lg:px-14">
+          <div className="mx-auto max-w-7xl">
+            <div className="grid gap-6 lg:grid-cols-2 lg:items-stretch">
 
-            <motion.div {...fadeUp} className="rounded-[2.2rem] border border-black/10 bg-white/55 p-7 backdrop-blur md:p-9">
-              <p className="text-xl leading-relaxed text-black/70 md:text-2xl">
-                Маркетинг — это не набор красивых блоков. Это понятная логика: что продаём, кому, почему человеку должно стать спокойнее, куда он нажимает и что происходит после заявки.
-              </p>
-              <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                {['понять', 'довериться', 'написать'].map((word) => (
-                  <div key={word} className="rounded-2xl bg-black px-4 py-3 text-center text-sm font-bold text-white">
-                    {word}
+              {/* Левая колонка — фото */}
+              <motion.div {...fadeUp} className="overflow-hidden rounded-[2.5rem]">
+                <img
+                  src={imgKsenia}
+                  alt="Ксения Кириллова — маркетолог"
+                  className="h-full w-full object-cover object-top"
+                  style={{ minHeight: '480px' }}
+                />
+              </motion.div>
+
+              {/* Правая колонка — позиция + кто я */}
+              <motion.div {...fadeUp} className="flex flex-col gap-6">
+
+                {/* Позиция */}
+                <div className="rounded-[2.2rem] border border-black/10 bg-white/55 p-7 backdrop-blur md:p-9">
+                  <p className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-[#1B63FF]">позиция</p>
+                  <h2 className="text-4xl font-extrabold leading-[1.02] tracking-[-0.045em] md:text-5xl">
+                    Я не делаю «красиво ради красиво»
+                  </h2>
+                  <p className="mt-6 text-xl leading-relaxed text-black/70">
+                    Маркетинг — это не набор красивых блоков. Это понятная логика: что продаём, кому, почему человеку должно стать спокойнее, куда он нажимает и что происходит после заявки.
+                  </p>
+                  <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                    {['понять', 'довериться', 'написать'].map((word) => (
+                      <div key={word} className="rounded-2xl bg-black px-4 py-3 text-center text-sm font-bold text-white">
+                        {word}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </motion.div>
+                </div>
+
+                {/* Кто я */}
+                <div className="rounded-[2.2rem] bg-black p-7 text-white md:p-9">
+                  <p className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-[#C8FF3D]">кто я</p>
+                  <h3 className="text-3xl font-extrabold leading-tight tracking-[-0.04em] md:text-4xl">
+                    Ксения Кириллова
+                  </h3>
+                  <p className="mt-4 text-lg leading-relaxed text-white/70">
+                    15 лет в маркетинге. Работала с B2B, IT, retail, СМИ и digital. Делаю сайты, упаковку и автоматизацию для экспертов и малого бизнеса — чтобы клиент понял, доверился и написал.
+                  </p>
+                  <div className="mt-6 grid grid-cols-2 gap-3">
+                    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                      <p className="text-3xl font-extrabold text-[#C8FF3D]">15+</p>
+                      <p className="mt-1 text-sm text-white/60">лет в маркетинге</p>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                      <p className="text-3xl font-extrabold text-[#C8FF3D]">6+</p>
+                      <p className="mt-1 text-sm text-white/60">ниш и индустрий</p>
+                    </div>
+                  </div>
+                </div>
+
+              </motion.div>
+            </div>
           </div>
         </section>
 
@@ -579,10 +509,7 @@ export default function KseniMarketingSystemsLanding() {
             </motion.div>
 
             <div className="grid gap-4 lg:grid-cols-12 lg:auto-rows-[minmax(13rem,auto)]">
-              <motion.div
-                {...fadeUp}
-                className="group relative overflow-hidden rounded-[2rem] bg-[#1B63FF] p-7 text-white shadow-[0_20px_70px_rgba(27,99,255,0.24)] lg:col-span-7 lg:row-span-2 lg:p-10"
-              >
+              <motion.div {...fadeUp} className="group relative overflow-hidden rounded-[2rem] bg-[#1B63FF] p-7 text-white shadow-[0_20px_70px_rgba(27,99,255,0.24)] lg:col-span-7 lg:row-span-2 lg:p-10">
                 <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/15 blur-2xl transition group-hover:scale-125" />
                 <div className="relative z-10 flex h-full flex-col justify-between">
                   <div className="flex items-center justify-between gap-4">
@@ -592,9 +519,7 @@ export default function KseniMarketingSystemsLanding() {
                     <span className="rounded-full bg-white/14 px-4 py-2 text-sm font-bold text-white/80">главная точка входа</span>
                   </div>
                   <div className="mt-14">
-                    <h3 className="max-w-xl text-4xl font-extrabold leading-[1.02] tracking-[-0.05em] md:text-6xl">
-                      Сайт / страница
-                    </h3>
+                    <h3 className="max-w-xl text-4xl font-extrabold leading-[1.02] tracking-[-0.05em] md:text-6xl">Сайт / страница</h3>
                     <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/72 md:text-xl">
                       Место, куда можно вести клиента из сторис, рекламы, переписки или профиля. Там он понимает, что вы предлагаете, кому это подходит, сколько стоит и как сделать следующий шаг.
                     </p>
@@ -605,48 +530,34 @@ export default function KseniMarketingSystemsLanding() {
               <motion.div {...fadeUp} className="rounded-[2rem] border border-black/10 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-xl lg:col-span-5">
                 <Target className="mb-8 h-7 w-7 text-[#1B63FF]" />
                 <h3 className="text-3xl font-extrabold tracking-[-0.045em]">Понятный оффер</h3>
-                <p className="mt-4 leading-relaxed text-black/60">
-                  Что продаём, кому это нужно и почему человеку должно стать спокойнее именно с вашим решением.
-                </p>
+                <p className="mt-4 leading-relaxed text-black/60">Что продаём, кому это нужно и почему человеку должно стать спокойнее именно с вашим решением.</p>
               </motion.div>
 
               <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] bg-[#C8FF3D] p-7 text-black transition hover:-translate-y-1 lg:col-span-5">
-                <motion.div
-                  className="absolute right-7 top-7 rounded-full bg-black px-3 py-1 text-xs font-bold text-white"
-                  animate={{ opacity: [1, 0.45, 1] }}
-                  transition={{ duration: 1.6, repeat: Infinity }}
-                >
+                <motion.div className="absolute right-7 top-7 rounded-full bg-black px-3 py-1 text-xs font-bold text-white" animate={{ opacity: [1, 0.45, 1] }} transition={{ duration: 1.6, repeat: Infinity }}>
                   new lead
                 </motion.div>
                 <Send className="mb-8 h-7 w-7 text-black" />
                 <h3 className="text-3xl font-extrabold tracking-[-0.045em]">Заявки без хаоса</h3>
-                <p className="mt-4 max-w-md leading-relaxed text-black/62">
-                  Кнопки, формы, Telegram, таблица, уведомления — чтобы человек написал, а заявка не потерялась.
-                </p>
+                <p className="mt-4 max-w-md leading-relaxed text-black/62">Кнопки, формы, Telegram, таблица, уведомления — чтобы человек написал, а заявка не потерялась.</p>
               </motion.div>
 
               <motion.div {...fadeUp} className="rounded-[2rem] bg-black p-7 text-white transition hover:-translate-y-1 lg:col-span-4">
                 <Bot className="mb-8 h-7 w-7 text-[#C8FF3D]" />
                 <h3 className="text-3xl font-extrabold tracking-[-0.045em]">AI и автоматизация</h3>
-                <p className="mt-4 leading-relaxed text-white/62">
-                  Ответы, тексты, контент, таблицы и простая рутина, которую не нужно каждый раз делать руками.
-                </p>
+                <p className="mt-4 leading-relaxed text-white/62">Ответы, тексты, контент, таблицы и простая рутина, которую не нужно каждый раз делать руками.</p>
               </motion.div>
 
               <motion.div {...fadeUp} className="rounded-[2rem] border border-black/10 bg-white/55 p-7 backdrop-blur transition hover:-translate-y-1 hover:bg-white lg:col-span-4">
                 <Sparkles className="mb-8 h-7 w-7 text-[#1B63FF]" />
                 <h3 className="text-3xl font-extrabold tracking-[-0.045em]">Контент и доверие</h3>
-                <p className="mt-4 leading-relaxed text-black/60">
-                  Что показывать, чтобы человек не просто посмотрел, а понял вашу ценность и захотел обратиться.
-                </p>
+                <p className="mt-4 leading-relaxed text-black/60">Что показывать, чтобы человек не просто посмотрел, а понял вашу ценность и захотел обратиться.</p>
               </motion.div>
 
               <motion.div {...fadeUp} className="rounded-[2rem] border border-black/10 bg-[#DFE7FF] p-7 transition hover:-translate-y-1 lg:col-span-4">
                 <Workflow className="mb-8 h-7 w-7 text-[#1B63FF]" />
                 <h3 className="text-3xl font-extrabold tracking-[-0.045em]">Маркетинг-разбор</h3>
-                <p className="mt-4 leading-relaxed text-black/62">
-                  Где сейчас теряется клиент: в оффере, странице, контенте, кнопке, переписке или обработке заявки.
-                </p>
+                <p className="mt-4 leading-relaxed text-black/62">Где сейчас теряется клиент: в оффере, странице, контенте, кнопке, переписке или обработке заявки.</p>
               </motion.div>
             </div>
 
@@ -686,39 +597,27 @@ export default function KseniMarketingSystemsLanding() {
             <motion.div {...fadeUp} className="mb-10 flex flex-wrap items-end justify-between gap-4 border-b-2 border-black pb-8">
               <div>
                 <p className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-[#1B63FF]">портфолио</p>
-                <h2 className="text-5xl font-extrabold leading-[0.96] tracking-[-0.05em] md:text-7xl">
-                  Работы
-                </h2>
+                <h2 className="text-5xl font-extrabold leading-[0.96] tracking-[-0.05em] md:text-7xl">Работы</h2>
               </div>
-              <p className="max-w-sm text-base text-black/50">
-                {cases.length} проектов — сайты, упаковка, рекламные кампании
-              </p>
+              <p className="max-w-sm text-base text-black/50">{cases.length} проектов — сайты, упаковка, рекламные кампании</p>
             </motion.div>
-
             <motion.div {...fadeUp}>
               <CasesSlider cases={cases} />
             </motion.div>
           </div>
         </section>
 
-        {/* ─── ОТЗЫВЫ — показываем только если есть данные ─────────────────── */}
+        {/* ─── ОТЗЫВЫ ────────────────────────────────────────────────────────── */}
         {testimonials.length > 0 && (
           <section className="px-5 py-20 md:px-10 lg:px-14">
             <div className="mx-auto max-w-7xl">
               <motion.div {...fadeUp} className="mb-12">
                 <p className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-[#1B63FF]">клиенты</p>
-                <h2 className="text-4xl font-extrabold leading-[1.02] tracking-[-0.045em] md:text-6xl">
-                  Что говорят после работы
-                </h2>
+                <h2 className="text-4xl font-extrabold leading-[1.02] tracking-[-0.045em] md:text-6xl">Что говорят после работы</h2>
               </motion.div>
-
               <div className="grid gap-6 md:grid-cols-2">
                 {testimonials.map((t) => (
-                  <motion.div
-                    key={t.name}
-                    {...fadeUp}
-                    className="rounded-[2rem] border border-black/10 bg-white/70 p-7 backdrop-blur md:p-9"
-                  >
+                  <motion.div key={t.name} {...fadeUp} className="rounded-[2rem] border border-black/10 bg-white/70 p-7 backdrop-blur md:p-9">
                     <MessageSquareQuote className="mb-6 h-7 w-7 text-[#1B63FF]" />
                     <p className="text-xl leading-relaxed text-black/80">{t.text}</p>
                     <div className="mt-6 border-t border-black/10 pt-5">
@@ -741,15 +640,10 @@ export default function KseniMarketingSystemsLanding() {
                 Можно начать с маленького, но понятного шага
               </h2>
             </motion.div>
-
             <div className="mt-12 grid gap-5 lg:grid-cols-4">
               {packages.map((pack) => (
-                <motion.div
-                  key={pack.name}
-                  {...fadeUp}
-                  className={`rounded-[2.2rem] p-7 ${
-                    pack.accent ? 'bg-[#1B63FF] text-white shadow-[0_20px_70px_rgba(27,99,255,0.28)]' : 'border border-black/10 bg-white/55'
-                  }`}
+                <motion.div key={pack.name} {...fadeUp}
+                  className={`rounded-[2.2rem] p-7 ${pack.accent ? 'bg-[#1B63FF] text-white shadow-[0_20px_70px_rgba(27,99,255,0.28)]' : 'border border-black/10 bg-white/55'}`}
                 >
                   <div className={`mb-10 inline-flex rounded-full px-3 py-1 text-sm font-bold ${pack.accent ? 'bg-white text-[#1B63FF]' : 'bg-[#F4F0E8] text-black/60'}`}>
                     {pack.tag}
@@ -758,8 +652,7 @@ export default function KseniMarketingSystemsLanding() {
                   <p className={`mt-4 text-4xl font-extrabold tracking-[-0.055em] ${pack.accent ? 'text-[#C8FF3D]' : 'text-[#1B63FF]'}`}>{pack.price}</p>
                   <p className={`mt-6 leading-relaxed ${pack.accent ? 'text-white/78' : 'text-black/62'}`}>{pack.desc}</p>
                   <a href={telegramUrl} className={`mt-10 inline-flex items-center gap-2 rounded-full px-5 py-3 font-bold ${pack.accent ? 'bg-white text-black' : 'bg-black text-white'}`}>
-                    Написать
-                    <ArrowRight className="h-4 w-4" />
+                    Написать <ArrowRight className="h-4 w-4" />
                   </a>
                 </motion.div>
               ))}
@@ -776,7 +669,6 @@ export default function KseniMarketingSystemsLanding() {
                 Быстро, без хаоса и бесконечных созвонов
               </h2>
             </motion.div>
-
             <div className="space-y-4">
               {process.map(([num, text]) => (
                 <motion.div key={num} {...fadeUp} className="grid grid-cols-[72px_1fr] gap-5 rounded-[2rem] border border-black/10 bg-white/48 p-6 backdrop-blur">
@@ -788,29 +680,14 @@ export default function KseniMarketingSystemsLanding() {
           </div>
         </section>
 
-        {/* ─── ПОЧЕМУ Я — переписано с самоописания на результат клиента ────── */}
-        {/*
-          БЫЛО: «10+ лет в маркетинге», «опыт в B2B, IT» — это резюме, не аргумент.
-          СТАЛО: что получает клиент, а не какой у меня бэкграунд.
-        */}
+        {/* ─── ПОЧЕМУ Я ──────────────────────────────────────────────────────── */}
         <section className="px-5 py-20 md:px-10 lg:px-14">
           <motion.div {...fadeUp} className="mx-auto max-w-7xl rounded-[2.5rem] bg-black p-7 text-white md:p-12 lg:p-16">
             <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
               <div>
-              <div>
-  <p className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-[#C8FF3D]">почему я</p>
-  <h2 className="text-4xl font-extrabold leading-[1.02] tracking-[-0.045em] md:text-6xl">
-  Я собираю систему, не просто сайт
-  </h2>
-  <div className="mt-8 overflow-hidden rounded-[2rem]">
-    <img
-      src={imgKsenia}
-      alt="Ксения Кириллова — маркетолог"
-      className="w-full object-cover object-top"
-      style={{ maxHeight: '420px' }}
-    />
-  </div>
-</div>
+                <p className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-[#C8FF3D]">почему я</p>
+                <h2 className="text-4xl font-extrabold leading-[1.02] tracking-[-0.045em] md:text-6xl">
+                  Я смотрю на сайт как маркетолог, а не как на витрину
                 </h2>
               </div>
               <div className="grid gap-4 md:grid-cols-2">
@@ -843,22 +720,14 @@ export default function KseniMarketingSystemsLanding() {
                   Напишите, что у вас за проект: ниша, услуга, где сейчас принимаете заявки и что хотите улучшить. Я подскажу, с чего лучше начать: сайт, упаковка, автоматизация или разбор.
                 </p>
               </div>
-
               <div className="flex flex-col gap-4 lg:items-end">
-                <a
-                  href={telegramUrl}
-                  className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#C8FF3D] px-8 py-5 text-lg font-extrabold text-black transition hover:-translate-y-0.5"
-                >
+                <a href={telegramUrl} className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#C8FF3D] px-8 py-5 text-lg font-extrabold text-black transition hover:-translate-y-0.5">
                   Написать в Telegram
                   <Zap className="h-5 w-5 transition group-hover:rotate-12" />
                 </a>
-                {/* Альтернатива для тех, кто не пользуется Telegram */}
                 <p className="text-sm text-white/50">
                   Нет Telegram?{' '}
-                  <a
-                    href="mailto:YOUR_EMAIL@example.com"
-                    className="underline underline-offset-2 hover:text-white"
-                  >
+                  <a href="mailto:YOUR_EMAIL@example.com" className="underline underline-offset-2 hover:text-white">
                     Напишите на почту
                   </a>
                 </p>
