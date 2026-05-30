@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import imgKsenia from './assets/ksenia-photo.jpg';
+import imgKsenia from './assets/ksenia-photo.png';
 import {
   ArrowLeft,
   ArrowRight,
