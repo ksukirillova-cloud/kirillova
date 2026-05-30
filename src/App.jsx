@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import imgKsenia from './assets/ksenia-photo.jpg';
 import {
   ArrowLeft,
   ArrowRight,
@@ -796,9 +797,20 @@ export default function KseniMarketingSystemsLanding() {
           <motion.div {...fadeUp} className="mx-auto max-w-7xl rounded-[2.5rem] bg-black p-7 text-white md:p-12 lg:p-16">
             <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
               <div>
-                <p className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-[#C8FF3D]">почему я</p>
-                <h2 className="text-4xl font-extrabold leading-[1.02] tracking-[-0.045em] md:text-6xl">
-                  Я смотрю на сайт как маркетолог, а не как на витрину
+              <div>
+  <p className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-[#C8FF3D]">почему я</p>
+  <h2 className="text-4xl font-extrabold leading-[1.02] tracking-[-0.045em] md:text-6xl">
+  Я собираю систему, не просто сайт
+  </h2>
+  <div className="mt-8 overflow-hidden rounded-[2rem]">
+    <img
+      src={imgKsenia}
+      alt="Ксения Кириллова — маркетолог"
+      className="w-full object-cover object-top"
+      style={{ maxHeight: '420px' }}
+    />
+  </div>
+</div>
                 </h2>
               </div>
               <div className="grid gap-4 md:grid-cols-2">
