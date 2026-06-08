@@ -97,7 +97,6 @@ const packages = [
 
 const cases = [
   {
-    {
   title: 'Сканлайт Маркетинг: новое направление с нуля',
   label: 'B2B · маркетинг · сайт · автоматизация',
   image: imgScanlightMarketing,
@@ -111,6 +110,7 @@ const cases = [
   url: 'https://b2b-marketing-self.vercel.app/marketing',
   isDemo: false,
 },
+{
     title: 'Упаковка B2B IT-платформы здравоохранения',
     label: 'B2B IT · сайт · позиционирование',
     image: imgN3,
