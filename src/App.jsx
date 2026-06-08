@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import imgKsenia from './assets/ksenia-photo.png';
 import {
@@ -12,6 +12,7 @@ import {
   Sparkles,
   Target,
   Workflow,
+  X,
   Zap,
   AlertCircle,
 } from 'lucide-react';
@@ -24,6 +25,7 @@ import imgWindows      from './assets/windows-cover.png';
 import imgMakeup       from './assets/makeup-cover.jpg';
 
 const telegramUrl = 'https://t.me/ksukirillova';
+const AUDIT       = 'https://audit.kirillova.online/';
 
 const fadeUp = {
   initial: { opacity: 0, y: 26 },
@@ -281,7 +283,7 @@ function CasesSlider({ cases }) {
         </div>
       </div>
 
-      {/* CTA после кейсов — человек только что увидел результаты */}
+      {/* CTA после кейсов */}
       <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
         <a href={telegramUrl} className="group inline-flex items-center justify-center gap-2 rounded-full bg-black px-7 py-4 text-base font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#1B63FF]">
           Хочу так же — обсудить проект
@@ -292,11 +294,71 @@ function CasesSlider({ cases }) {
   );
 }
 
+// ─── STICKY AUDIT BAR ─────────────────────────────────────────────────────────
+// Появляется после 30% скролла. Ловит тёплых посетителей,
+// которые читают, но не дойдут до CTA в подвале.
+
+function StickyAuditBar({ visible, onClose }) {
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ y: 72, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 72, opacity: 0 }}
+          transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+          className="fixed bottom-0 left-0 right-0 z-50 border-t border-black/10 bg-white/95 backdrop-blur-md"
+        >
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 md:px-10 lg:px-14">
+            <p className="hidden text-sm font-semibold text-black/60 sm:block">
+              Хочешь узнать, где твой сайт теряет клиентов?
+            </p>
+            <a
+              href={AUDIT}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-[#1B63FF] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#1045CC] whitespace-nowrap"
+            >
+              Проверить сайт бесплатно
+              <ArrowRight className="h-3.5 w-3.5" />
+            </a>
+            <button
+              onClick={onClose}
+              className="flex-shrink-0 p-1 text-black/30 transition hover:text-black/60"
+              aria-label="Закрыть"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 // ─── ГЛАВНЫЙ КОМПОНЕНТ ───────────────────────────────────────────────────────
 
 export default function KseniMarketingSystemsLanding() {
+  const [stickyVisible,   setStickyVisible]   = useState(false);
+  const [stickyDismissed, setStickyDismissed] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (stickyDismissed) return;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      setStickyVisible(total > 0 ? window.scrollY / total > 0.3 : false);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [stickyDismissed]);
+
   return (
     <>
+      <StickyAuditBar
+        visible={stickyVisible && !stickyDismissed}
+        onClose={() => { setStickyDismissed(true); setStickyVisible(false); }}
+      />
+
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&display=swap');
         html {
@@ -358,14 +420,15 @@ export default function KseniMarketingSystemsLanding() {
               </p>
 
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-                {/* Основная кнопка — низкий порог входа */}
+                {/* Основная кнопка */}
                 <a href="#packages" className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#1B63FF] px-7 py-4 text-base font-bold text-white shadow-[0_18px_60px_rgba(27,99,255,0.32)] transition hover:-translate-y-0.5">
                   Посмотреть форматы
                   <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
                 </a>
-                {/* Вторичная — для готовых */}
-                <a href={telegramUrl} className="inline-flex items-center justify-center rounded-full border border-black/15 bg-white/45 px-7 py-4 text-base font-bold backdrop-blur transition hover:bg-white">
-                  Получить разбор за 3 500 ₽
+                {/* ПРАВКА 1: вторичная кнопка → бесплатный аудит сайта */}
+                <a href={AUDIT} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-black/15 bg-white/45 px-7 py-4 text-base font-bold backdrop-blur transition hover:bg-white">
+                  Проверить сайт бесплатно
+                  <ArrowRight className="h-5 w-5" />
                 </a>
               </div>
             </motion.div>
@@ -442,11 +505,35 @@ export default function KseniMarketingSystemsLanding() {
                 </div>
               ))}
             </div>
-            {/* CTA после болей — человек узнал себя */}
             <div className="mt-10 flex justify-center">
               <a href={telegramUrl} className="group inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-4 text-base font-bold text-white backdrop-blur transition hover:bg-white hover:text-black">
                 Узнаёте себя? Начнём с разбора
                 <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
+              </a>
+            </div>
+          </motion.div>
+        </section>
+
+        {/* ПРАВКА 2: аудит-блок после болей — пик узнавания */}
+        <section className="px-5 pb-6 md:px-10 lg:px-14">
+          <motion.div {...fadeUp} className="mx-auto max-w-7xl rounded-[2.5rem] border border-[#1B63FF]/20 bg-[#EEF3FF] p-7 md:p-10">
+            <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+              <div>
+                <p className="text-xl font-extrabold tracking-[-0.03em]">
+                  Хочешь узнать, где твой сайт теряет людей?
+                </p>
+                <p className="mt-2 text-base text-black/60">
+                  AI-аудит за 30 секунд — оффер, структура, доверие, путь заявки
+                </p>
+              </div>
+              <a
+                href={AUDIT}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex flex-shrink-0 items-center gap-2 rounded-full bg-[#1B63FF] px-6 py-3.5 text-base font-bold text-white transition hover:bg-[#1045CC] whitespace-nowrap"
+              >
+                Проверить сайт бесплатно
+                <ArrowRight className="h-5 w-5" />
               </a>
             </div>
           </motion.div>
@@ -457,7 +544,6 @@ export default function KseniMarketingSystemsLanding() {
           <div className="mx-auto max-w-7xl">
             <div className="grid gap-6 lg:grid-cols-2 lg:items-stretch">
 
-              {/* Левая колонка — фото */}
               <motion.div {...fadeUp} className="overflow-hidden rounded-[2.5rem]">
                 <img
                   src={imgKsenia}
@@ -467,10 +553,8 @@ export default function KseniMarketingSystemsLanding() {
                 />
               </motion.div>
 
-              {/* Правая колонка — позиция + кто я */}
               <motion.div {...fadeUp} className="flex flex-col gap-6">
 
-                {/* Позиция */}
                 <div className="rounded-[2.2rem] border border-black/10 bg-white/55 p-7 backdrop-blur md:p-9">
                   <p className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-[#1B63FF]">позиция</p>
                   <h2 className="text-4xl font-extrabold leading-[1.02] tracking-[-0.045em] md:text-5xl">
@@ -488,7 +572,6 @@ export default function KseniMarketingSystemsLanding() {
                   </div>
                 </div>
 
-                {/* Кто я */}
                 <div className="rounded-[2.2rem] bg-black p-7 text-white md:p-9">
                   <p className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-[#C8FF3D]">кто я</p>
                   <h3 className="text-3xl font-extrabold leading-tight tracking-[-0.04em] md:text-4xl">
@@ -507,7 +590,6 @@ export default function KseniMarketingSystemsLanding() {
                       <p className="mt-1 text-sm text-white/60">ниш и индустрий</p>
                     </div>
                   </div>
-                  {/* CTA — доверие начало формироваться */}
                   <a href="#cases" className="mt-7 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-bold text-white transition hover:bg-white hover:text-black">
                     Посмотреть кейсы <ArrowRight className="h-4 w-4" />
                   </a>
@@ -701,7 +783,6 @@ export default function KseniMarketingSystemsLanding() {
                   <p className="text-xl font-bold leading-snug tracking-[-0.03em]">{text}</p>
                 </motion.div>
               ))}
-              {/* CTA после процесса — страх неизвестности снят */}
               <motion.div {...fadeUp} className="pt-2">
                 <a href={telegramUrl} className="group inline-flex items-center gap-2 rounded-full bg-black px-7 py-4 text-base font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#1B63FF]">
                   Понятно, начнём
@@ -757,10 +838,11 @@ export default function KseniMarketingSystemsLanding() {
                   Написать в Telegram
                   <Zap className="h-5 w-5 transition group-hover:rotate-12" />
                 </a>
-                <p className="text-sm text-white/50">
-                  Нет Telegram?{' '}
-                  <a href="mailto:YOUR_EMAIL@example.com" className="underline underline-offset-2 hover:text-white">
-                    Напишите на почту
+                {/* ПРАВКА 3: вторичная ссылка на аудит в подвале */}
+                <p className="text-sm text-white/60">
+                  Или начните бесплатно:{' '}
+                  <a href={AUDIT} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-white">
+                    проверьте сайт за 30 секунд →
                   </a>
                 </p>
               </div>
