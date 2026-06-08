@@ -19,6 +19,7 @@ import {
 
 import imgN3           from './assets/n3-cover.png';
 import imgScanlight    from './assets/scanlight-cover.png';
+import imgScanlightMarketing from './assets/scanlight-marketing-cover.png';
 import imgMetro        from './assets/metro-cover.png';
 import imgPsychologist from './assets/psychologist-cover.png';
 import imgWindows      from './assets/windows-cover.png';
@@ -96,6 +97,20 @@ const packages = [
 
 const cases = [
   {
+    {
+  title: 'Сканлайт Маркетинг: новое направление с нуля',
+  label: 'B2B · маркетинг · сайт · автоматизация',
+  image: imgScanlightMarketing,
+  fit: 'cover',
+  bg: '#f0f4ff',
+  metric: 'новое направление → поток заявок без менеджера на входе',
+  problem: 'Маркетинговое направление существовало внутри компании, но снаружи его не было: нет сайта, нет SEO, нет понятного пути для клиента из поиска.',
+  solution: 'Собрала сайт с программатик-SEO под нишевые B2B-запросы. Внедрила чат-бот, который квалифицирует входящих, заносит в CRM и ведёт прогрев по сценарию.',
+  result: 'Органика приводит целевых клиентов по нишевым запросам. Менеджер подключается только на закрытии — квалификация, CRM и прогрев работают автоматически.',
+  tags: ['B2B', 'программатик SEO', 'чат-бот', 'CRM'],
+  url: 'https://b2b-marketing-self.vercel.app/marketing',
+  isDemo: false,
+},
     title: 'Упаковка B2B IT-платформы здравоохранения',
     label: 'B2B IT · сайт · позиционирование',
     image: imgN3,
@@ -311,7 +326,7 @@ function StickyAuditBar({ visible, onClose }) {
         >
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 md:px-10 lg:px-14">
             <p className="hidden text-sm font-semibold text-black/60 sm:block">
-              Хочешь узнать, где твой сайт теряет клиентов?
+              Хотите узнать, где ваш сайт теряет клиентов?
             </p>
             <a
               href={AUDIT}
